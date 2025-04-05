@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'Controller/Authentication/authentication_controller.dart';
 import 'Routes/route.dart';
 import 'Routes/route_manager.dart';
 
@@ -12,6 +13,7 @@ void main() async{
 
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
+    Get.put(AuthController());
     try {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
@@ -32,14 +34,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
-      initialRoute: AttsRoutes.splashRoute, // Set an initial route
+      debugShowCheckedModeBanner: false,
+      title: 'ATTS Jewellery',
+      initialRoute: AttsRoutes.splashRoute,
       onGenerateRoute: RouteManager.generateRoute,
-      theme: ThemeData(
-
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
     );
   }
 }

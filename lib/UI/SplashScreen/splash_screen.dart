@@ -53,14 +53,14 @@ class _SplashScreenState extends State<SplashScreen>
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [appFirstColor, appPrimaryColor],
+            colors: [appBottomColor, appButton2Color],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
         child: Center(
           child: Image.asset(
-            'assets/namam.png',
+            'assets/logo.png',
             width: size.width * 0.6, // Adjust width dynamically
           ).animate().fade(duration: 1200.ms), // Fading animation
         ),

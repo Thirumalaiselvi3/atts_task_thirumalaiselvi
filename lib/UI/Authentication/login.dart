@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:atts/Controller/Authentication/authentication_controller.dart';
 import 'package:atts/Reusable/button.dart';
 import 'package:atts/Reusable/color.dart';
 import 'package:atts/Reusable/container_decoration.dart';
@@ -9,6 +10,7 @@ import 'package:atts/Routes/route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class LoginScreen extends StatefulWidget {
 
@@ -25,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  final AuthController authController = Get.find();
   RegExp emailRegex = RegExp(r'\S+@\S+\.\S+');
   String? errorMessage;
   var showPassword = true;
@@ -49,9 +52,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: SafeArea(
-        child: Form(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: appBottomColor,
+        body: Form(
           key: _formKey,
           child: SingleChildScrollView(
             physics: const ScrollPhysics(),
@@ -62,28 +66,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10, left: 10),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
+        
+                    SizedBox(height: 50),
+                    Center(
+                      child: Container(
+                        decoration: LogoDecoration(),
                         child: Image.asset(
-                          "assets/arrow.png",
-                          width: size.width * 0.1,
-                          height: size.height * 0.05,
+                          "assets/logo.png",
+                          height: 200,
                           alignment: Alignment.topCenter,
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Container(
-                      decoration: LogoDecoration(),
-                      child: Image.asset(
-                        "assets/logo1.png",
-                        alignment: Alignment.topCenter,
-                      ),
-                    ),
+                    SizedBox(height: 20),
                     Center(
                       child: TweenAnimationBuilder<double>(
                         duration: const Duration(seconds: 2), // Scale effect
@@ -94,7 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: AnimatedTextKit(
                               animatedTexts: [
                                 TyperAnimatedText(
-                                  'WELCOME TO SRI SUNDARARAJA PERUMAL TEMPLE',
+                                  'Let’s Get You Sparkling Again!',
+                                  // 'WELCOME TO SRI SUNDARARAJA PERUMAL TEMPLE',
                                   textAlign: TextAlign.center,
                                   textStyle: MyTextStyle.splashTitle(),
                                   speed: const Duration(
@@ -108,9 +104,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                       ),
                     ),
-                    SizedBox(height: 20),
+
                   ],
                 ),
+                SizedBox(height: 30),
                 Container(
                   margin: const EdgeInsets.only(
                       top: 0, left: 10, right: 10, bottom: 10),
@@ -225,7 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             }
                                             return null;
                                           }),
-
+        
                                       SizedBox(height: 10),
                                     ],
                                   ),
@@ -239,7 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: appPrimaryColor, size: 30)
                           : InkWell(
                         onTap: () {
-                          Navigator.pushReplacementNamed(context, AttsRoutes.bottomNavBarRoute);
+                          authController.signIn(email.text, password.text);
                         },
                         child: appButton(
                             height: 50,

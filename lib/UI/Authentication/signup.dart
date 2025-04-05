@@ -1,3 +1,4 @@
+import 'package:atts/Controller/Authentication/authentication_controller.dart';
 import 'package:atts/Reusable/button.dart';
 import 'package:atts/Reusable/color.dart';
 import 'package:atts/Reusable/customTextfield.dart';
@@ -5,6 +6,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import '../../Reusable/container_decoration.dart';
 import '../../Reusable/text_styles.dart';
 
@@ -22,18 +24,14 @@ class _SignUpState extends State<SignUp> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController email = TextEditingController();
-  TextEditingController first = TextEditingController();
-  TextEditingController last = TextEditingController();
   TextEditingController userName = TextEditingController();
-  TextEditingController icNo = TextEditingController();
-  TextEditingController watsNo = TextEditingController();
-  TextEditingController passPort = TextEditingController();
+  TextEditingController phoneNo = TextEditingController();
   TextEditingController password = TextEditingController();
-  TextEditingController address1 = TextEditingController();
-  TextEditingController address2 = TextEditingController();
+  TextEditingController address = TextEditingController();
+  final AuthController authController = Get.find();
   RegExp emailRegex = RegExp(r'\S+@\S+\.\S+');
   String? errorMessage;
-  String _selectedCountryCode = "+60";
+  String _selectedCountryCode = "+91";
   var showPassword = true;
   bool loginLoad = false;
   @override
@@ -49,9 +47,10 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: appBottomColor,
+        body: SingleChildScrollView(
           child: Column(
             children: [
               Padding(
@@ -81,11 +80,14 @@ class _SignUpState extends State<SignUp> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          decoration: LogoDecoration(),
-                          child: Image.asset(
-                            "assets/logo1.png",
-                            alignment: Alignment.topCenter,
+                        Center(
+                          child: Container(
+                            decoration: LogoDecoration(),
+                            child: Image.asset(
+                              "assets/logo.png",
+                              height: 200,
+                              alignment: Alignment.topCenter,
+                            ),
                           ),
                         ),
 
@@ -94,78 +96,38 @@ class _SignUpState extends State<SignUp> {
                           child: Text("Let's create your account",
                               style: MyTextStyle.f20(appButton1Color)),
                         ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text("FirstName",
-                                    style: MyTextStyle.f14(appButton1Color)),
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text("LastName",
-                                    style: MyTextStyle.f14(appButton1Color)),
-                              ),
-                            ),
-                          ],
-                        ),
+
                         SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: CustomTextField(
-                                hint: "First Name",
-                                readOnly: false,
-                                controller: first,
-                                baseColor: appPrimaryColor,
-                                borderColor: appButton1Color,
-                                errorColor: redColor,
-                                inputType: TextInputType.text,
-                                showSuffixIcon: false,
-                                obscureText: false,
-                                maxLength: 30,
-                                onChanged: (val) {
-                                  _formKey.currentState!.validate();
-                                },
-                                validator: (value) {
-                                  if (value != null && value.isEmpty) {
-                                    return 'Please enter your First Name';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                                width: 10),
-                            Expanded(
-                              child: CustomTextField(
-                                hint: "Last Name",
-                                readOnly: false,
-                                controller: last,
-                                baseColor: appPrimaryColor,
-                                borderColor: appButton1Color,
-                                errorColor: redColor,
-                                inputType: TextInputType.text,
-                                showSuffixIcon: false,
-                                obscureText: false,
-                                maxLength: 30,
-                                onChanged: (val) {
-                                  _formKey.currentState!.validate();
-                                },
-                                validator: (value) {
-                                  if (value != null && value.isEmpty) {
-                                    return 'Please enter your Last Name';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text("User Name", style: MyTextStyle.f14(appButton1Color)),
                         ),
+                        CustomTextField(
+                            hint: "User Name",
+                            readOnly: false,
+                            controller: userName,
+                            baseColor: appPrimaryColor,
+                            borderColor: appButton1Color,
+                            errorColor: redColor,
+                            inputType: TextInputType.emailAddress,
+                            showSuffixIcon: false,
+                            fTextInputFormatter: FilteringTextInputFormatter.allow(
+                                RegExp("[a-zA-Z0-9.@]")),
+                            obscureText: false,
+                            maxLength: 30,
+                            onChanged: (val) {
+                              _formKey.currentState!.validate();
+                            },
+                            validator: (value) {
+                              if (value != null) {
+                                if (value.isEmpty) {
+                                  return 'Please enter your Name';
+                                }  else {
+                                  return null;
+                                }
+                              }
+                              return null;
+                            }),
                         SizedBox(height: 10),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
@@ -240,134 +202,13 @@ class _SignUpState extends State<SignUp> {
                               return null;
                             }),
                         SizedBox(height: 10),
-                        // Padding(
-                        //   padding: const EdgeInsets.all(10.0),
-                        //   child:
-                        //       Text("User Name", style: MyTextStyle.f14(appButton1Color)),
-                        // ),
-                        // CustomTextField(
-                        //   hint: "User Name",
-                        //   readOnly: false,
-                        //   controller: userName,
-                        //   baseColor: appPrimaryColor,
-                        //   borderColor: appButton1Color,
-                        //   errorColor: redColor,
-                        //   inputType: TextInputType.text,
-                        //   showSuffixIcon: false,
-                        //   obscureText: false,
-                        //   maxLength: 20,
-                        //   onChanged: (val) {
-                        //     _formKey.currentState!.validate();
-                        //   },
-                        //   validator: (value) {
-                        //     if (value != null) {
-                        //       if (value.isEmpty) {
-                        //         return 'Please enter your user name';
-                        //       } else {
-                        //         return null;
-                        //       }
-                        //     }
-                        //     return null;
-                        //   }
-                        // ),
-                        // verticalSpace(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Text("IC Number", style: MyTextStyle.f14(appButton1Color)),
-                        ),
-                        CustomTextField(
-                            hint: "IC number",
-                            readOnly: false,
-                            controller: icNo,
-                            baseColor: appPrimaryColor,
-                            borderColor: appButton1Color,
-                            errorColor: redColor,
-                            inputType: TextInputType.number,
-                            enableNricFormatter: true,
-                            fTextInputFormatter:
-                            FilteringTextInputFormatter.allow(RegExp("[0-9-]")),
-                            showSuffixIcon: false,
-                            obscureText: false,
-                            maxLength: 14,
-                            onChanged: (val) {
-                              _formKey.currentState!.validate();
-                            },
-                            validator: (value) {
-                              if (value != null) {
-                                if (value.isEmpty) {
-                                  return 'Please enter your ic number';
-                                } else {
-                                  return null;
-                                }
-                              }
-                              return null;
-                            }
-                        ),
                         SizedBox(height: 10),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
-                          child: Text("Whatsapp Number",
+                          child: Text("Phone Number",
                               style: MyTextStyle.f14(appButton1Color)),
                         ),
-                        // CustomTextField(
-                        //   hint: "Whatsapp number",
-                        //   readOnly: false,
-                        //   controller: watsNo,
-                        //   baseColor: appPrimaryColor,
-                        //   borderColor: appButton1Color,
-                        //   errorColor: redColor,
-                        //   inputType: TextInputType.number,
-                        //   showSuffixIcon: false,
-                        //   countryCodePicker: StatefulBuilder(
-                        //     builder: (context, setState) {
-                        //       return SizedBox(
-                        //         height: 50,
-                        //         child: Container(
-                        //           margin: const EdgeInsets.only(left: 10),
-                        //           decoration: BoxDecoration(
-                        //             borderRadius: BorderRadius.circular(10),
-                        //             border: Border.all(
-                        //               color: appButton1Color,
-                        //               width: 1,
-                        //             ),
-                        //           ),
-                        //           child: CountryCodePicker(
-                        //             onChanged: (countryCode) {
-                        //               setState(() {
-                        //                 _selectedCountryCode =
-                        //                     countryCode.dialCode ?? "+60";
-                        //               });
-                        //             },
-                        //             initialSelection: _selectedCountryCode,
-                        //             favorite: const ['+60', '+91', '+44'],
-                        //             showCountryOnly: false,
-                        //             textStyle: const TextStyle(color: appButton1Color),
-                        //             showOnlyCountryWhenClosed: false,
-                        //             alignLeft: false,
-                        //             showFlag: false, // Hide the flag
-                        //           ),
-                        //         ),
-                        //       );
-                        //     },
-                        //   ),
-                        //   fTextInputFormatter:
-                        //       FilteringTextInputFormatter.allow(RegExp("[0-9]")),
-                        //   obscureText: false,
-                        //   maxLength: 11,
-                        //   onChanged: (val) {
-                        //     _formKey.currentState!.validate();
-                        //   },
-                        //   validator: (value) {
-                        //     if (value != null) {
-                        //       if (value.isEmpty) {
-                        //         return 'Please enter your Whatsapp number';
-                        //       } else {
-                        //         return null;
-                        //       }
-                        //     }
-                        //     return null;
-                        //   }
-                        // ),
+
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -401,9 +242,9 @@ class _SignUpState extends State<SignUp> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   CustomTextField(
-                                    hint: "Whatsapp number",
+                                    hint: "Phone number",
                                     readOnly: false,
-                                    controller: watsNo,
+                                    controller: phoneNo,
                                     baseColor: appPrimaryColor,
                                     borderColor: appButton1Color,
                                     errorColor: redColor,
@@ -418,7 +259,7 @@ class _SignUpState extends State<SignUp> {
                                     },
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'Please enter your WhatsApp number';
+                                        return 'Please enter your phone number';
                                       }
                                       return null;
                                     },
@@ -433,12 +274,12 @@ class _SignUpState extends State<SignUp> {
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child:
-                          Text("Address1", style: MyTextStyle.f14(appButton1Color)),
+                          Text("Address", style: MyTextStyle.f14(appButton1Color)),
                         ),
                         CustomTextField(
-                            hint: "Address1",
+                            hint: "Address",
                             readOnly: false,
-                            controller: address1,
+                            controller: address,
                             baseColor: appPrimaryColor,
                             borderColor: appButton1Color,
                             errorColor: redColor,
@@ -452,7 +293,7 @@ class _SignUpState extends State<SignUp> {
                             validator: (value) {
                               if (value != null) {
                                 if (value.isEmpty) {
-                                  return 'Please enter your Address1';
+                                  return 'Please enter your Address';
                                 } else {
                                   return null;
                                 }
@@ -461,42 +302,13 @@ class _SignUpState extends State<SignUp> {
                             }
                         ),
                         SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child:
-                          Text("Address2", style: MyTextStyle.f14(appButton1Color)),
-                        ),
-                        CustomTextField(
-                            hint: "Address2",
-                            readOnly: false,
-                            controller: address2,
-                            baseColor: appPrimaryColor,
-                            borderColor: appButton1Color,
-                            errorColor: redColor,
-                            inputType: TextInputType.text,
-                            showSuffixIcon: false,
-                            obscureText: false,
-                            maxLength: 20,
-                            onChanged: (val) {
-                              _formKey.currentState!.validate();
-                            },
-                            validator: (value) {
-                              if (value != null) {
-                                if (value.isEmpty) {
-                                  return 'Please enter your Address2';
-                                } else {
-                                  return null;
-                                }
-                              }
-                              return null;
-                            }
-                        ),
+
                         SizedBox(height: 30),
                         loginLoad
                             ? const SpinKitCircle(color: appPrimaryColor, size: 30)
                             : InkWell(
                           onTap: () {
-
+                            authController.signUp(email.text, password.text, _selectedCountryCode, phoneNo.text, userName.text, address.text);
                           },
                           child: appButton(
                               height: 50,

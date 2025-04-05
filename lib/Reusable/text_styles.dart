@@ -10,7 +10,7 @@ class MyTextStyle {
     return TextStyle(
       fontFamily: "Poppins",
       color: color,
-      fontSize: 38,
+      fontSize: 42,
       fontStyle: fontStyle ?? FontStyle.normal,
       fontWeight: weight ?? FontWeight.w600,
       decoration: textDecoration,
@@ -250,12 +250,12 @@ class MyTextStyle {
     return const TextStyle(
       fontSize: 20,
       fontWeight: FontWeight.bold,
-      color: appTitleColor,
+      color: appButton1Color,
       letterSpacing: 2.0,
       shadows: [
         Shadow(
           blurRadius: 15,
-          color: appTitleShadowColor,
+          color: appButton2Color,
         ),
       ],
     );

@@ -21,8 +21,8 @@ class _SecondSplashScreenState extends State<SecondSplashScreen>
   bool isPressed = false;
   int _currentIndex = 0;
   final List<String> images = [
-    'assets/perumal1.jpeg',
-    'assets/perumal2.jpeg',
+    'assets/jewel1.jpg',
+    'assets/jewel2.jpg',
   ];
   bool isSwipeComplete = false;
 
@@ -110,7 +110,7 @@ class _SecondSplashScreenState extends State<SecondSplashScreen>
                         child: AnimatedTextKit(
                           animatedTexts: [
                             TyperAnimatedText(
-                              'SRI SUNDARARAJA PERUMAL TEMPLE',
+                              'SHINE EVERY MOMENT',
                               textAlign: TextAlign.center,
                               textStyle: MyTextStyle.splashTitle(),
                               speed: const Duration(
@@ -129,9 +129,16 @@ class _SecondSplashScreenState extends State<SecondSplashScreen>
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   width: double.infinity,
                   child: GestureDetector(
-                    onTap: () {
-
-                      Navigator.pushNamed(context,AttsRoutes.loginRoute);
+                    onTap: () async {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      String? uid = prefs.getString("uid");
+                      print("Stored UID: $uid");
+                      if (uid!.isEmpty) {
+                        Navigator.pushNamed(context, AttsRoutes.loginRoute);
+                      } else {
+                        Navigator.pushNamed(context, AttsRoutes.bottomNavBarRoute);
+                      }
                     },
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
@@ -140,32 +147,35 @@ class _SecondSplashScreenState extends State<SecondSplashScreen>
                         gradient: isPressed
                             ? null
                             : const LinearGradient(
-                          colors: [
-                            Colors.deepOrange,
-                            Colors.amber,
-                            Colors.red
-                          ],
-                        ),
+                                colors: [
+                                  appButton2Color,
+                                  appButton1Color,
+                                  appButton2Color
+                                ],
+                              ),
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: CustomPaint(
                         painter: GradientBorderPainter(_animation),
                         child: ElevatedButton(
-                          onPressed: () async{
-
-                            Navigator.pushReplacementNamed(context, AttsRoutes.loginRoute);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:Colors.transparent, // Button background
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
+                            onPressed: () async {
+                              Navigator.pushReplacementNamed(
+                                  context, AttsRoutes.loginRoute);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Colors.transparent, // Button background
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 32, vertical: 10),
                             ),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 32, vertical: 10),
-                          ),
-                          child:   Text("Start Exploring",
-                              style: MyTextStyle.f16(whiteColor,weight: FontWeight.w600),)
-                        ),
+                            child: Text(
+                              "Start Exploring",
+                              style: MyTextStyle.f16(whiteColor,
+                                  weight: FontWeight.w600),
+                            )),
                       ),
                     ),
                   ),
@@ -279,8 +289,11 @@ class GradientBorderPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()
       ..shader = SweepGradient(
-        colors: const [
-          Colors.amber, Colors.orange, Colors.red, Colors.amber
+        colors: [
+          Colors.amber.shade200,
+          Colors.amber.shade400,
+          Colors.amber.shade600,
+          Colors.amber.shade800,
         ],
         stops: const [0.0, 0.3, 0.7, 1.0],
         transform: GradientRotation(animation.value),
