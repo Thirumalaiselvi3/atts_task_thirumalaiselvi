@@ -104,7 +104,7 @@ class _HomeState extends State<Home> {
 
                       margin: const EdgeInsets.only(right: 10),
                       decoration: BoxDecoration(
-                        color: isSelected ? appBottomColor: Colors.white,
+                        color: isSelected ? appBottomColor:appFirstColor,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
