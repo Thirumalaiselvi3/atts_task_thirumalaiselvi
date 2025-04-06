@@ -2,20 +2,20 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import 'color.dart';
+import 'color.dart'; // Make sure appButton1Color and appButton2Color are defined
 
 class CarouselSliderWidget extends StatefulWidget {
   final List<String> imageUrls;
-  final Color backgroundColor; // Background color for transparent images
+  final Color backgroundColor;
 
   const CarouselSliderWidget({
     super.key,
     required this.imageUrls,
-    this.backgroundColor = Colors.white, // Default background color
+    this.backgroundColor = Colors.white,
   });
 
   @override
-  _CarouselSliderWidgetState createState() => _CarouselSliderWidgetState();
+  State<CarouselSliderWidget> createState() => _CarouselSliderWidgetState();
 }
 
 class _CarouselSliderWidgetState extends State<CarouselSliderWidget> {
@@ -25,65 +25,90 @@ class _CarouselSliderWidgetState extends State<CarouselSliderWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Full-Width Image Carousel
         CarouselSlider.builder(
           itemCount: widget.imageUrls.length,
           options: CarouselOptions(
-            height: 220,
+            height: 200,
             autoPlay: true,
-            autoPlayCurve: Curves.easeInOut,
-            enlargeCenterPage: false, // Disable center zoom effect
-            viewportFraction: 1, // Full width
+            autoPlayInterval: const Duration(seconds: 3),
+            autoPlayAnimationDuration: const Duration(milliseconds: 800),
+            enlargeCenterPage: true,
+            viewportFraction: 0.9,
             onPageChanged: (index, reason) {
-              setState(() {
-                activeIndex = index;
-              });
+              setState(() => activeIndex = index);
             },
           ),
           itemBuilder: (context, index, realIndex) {
-            return buildImage(widget.imageUrls[index]);
+            final imagePath = widget.imageUrls[index];
+            return buildImage(imagePath);
           },
         ),
-
-        // Dot Indicator
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
         buildIndicator(),
       ],
     );
   }
 
-  // Image with Background Color
   Widget buildImage(String imagePath) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+      margin: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
         gradient: const LinearGradient(
-          colors: [appButton1Color, appButton2Color], // Replace with your desired colors
+          colors: [appButton1Color, appButton2Color],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        // color: widget.backgroundColor, // Background color for transparent images
-        borderRadius: BorderRadius.circular(20),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20), // Rounded corners
-        child: Image.asset(
-          imagePath,
-          fit: BoxFit.fill, // Ensure transparency is respected
-          width: double.infinity,
+        borderRadius: BorderRadius.circular(20),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.black.withOpacity(0.2),
+                    Colors.black.withOpacity(0.05),
+                  ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  // Dot Indicator
   Widget buildIndicator() {
     return AnimatedSmoothIndicator(
       activeIndex: activeIndex,
       count: widget.imageUrls.length,
-      effect: const ExpandingDotsEffect(
+      effect: ExpandingDotsEffect(
         activeDotColor: appButton2Color,
-        dotHeight: 8,
-        dotWidth: 8,
+        dotHeight: 5,
+        dotWidth: 10,
+        spacing: 6,
+        expansionFactor: 4,
+        dotColor: Colors.grey.shade300,
       ),
     );
   }
