@@ -1,6 +1,5 @@
 import 'package:atts/Model/product_model.dart';
 import 'package:atts/Reusable/color.dart';
-import 'package:atts/Reusable/color.dart';
 import 'package:atts/UI/Landing%20Screen/Home/product_details.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
