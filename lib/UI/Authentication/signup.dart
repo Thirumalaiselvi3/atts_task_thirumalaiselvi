@@ -195,7 +195,11 @@ class _SignUpState extends State<SignUp> {
                               if (value != null) {
                                 if (value.isEmpty) {
                                   return 'Please enter your password';
-                                } else {
+                                }
+                                else if (value.length < 6) {
+                                  return 'Password must be at least 6 characters';
+                                }
+                                else {
                                   return null;
                                 }
                               }
@@ -262,6 +266,9 @@ class _SignUpState extends State<SignUp> {
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'Please enter your phone number';
+                                      }
+                                      else if (value.length < 10) {
+                                        return 'Password must be at least 10 characters';
                                       }
                                       return null;
                                     },
