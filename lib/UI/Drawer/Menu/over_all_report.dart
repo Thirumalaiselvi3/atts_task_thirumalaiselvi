@@ -1,4 +1,8 @@
 // Import packages
+import 'package:atts/Reusable/button.dart';
+import 'package:atts/Reusable/color.dart';
+import 'package:atts/Reusable/customTextfield.dart';
+import 'package:atts/Reusable/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -28,7 +32,9 @@ class _OverAllReportState extends State<OverAllReport> {
     super.initState();
     _fetchData();
   }
-  Future<void> _fetchData({bool isNext = false, bool isPrevious = false}) async {
+
+  Future<void> _fetchData(
+      {bool isNext = false, bool isPrevious = false}) async {
     setState(() => _isLoading = true);
 
     Query query = FirebaseFirestore.instance.collection('billing');
@@ -39,7 +45,10 @@ class _OverAllReportState extends State<OverAllReport> {
       final snapshot = await query.get();
 
       final filtered = snapshot.docs.where((doc) {
-        final productName = (doc.data() as Map<String, dynamic>)['productName']?.toString().toLowerCase() ?? '';
+        final productName = (doc.data() as Map<String, dynamic>)['productName']
+                ?.toString()
+                .toLowerCase() ??
+            '';
         return productName.contains(search);
       }).toList();
 
@@ -150,7 +159,6 @@ class _OverAllReportState extends State<OverAllReport> {
 
   void _openFilterDrawer() {
     _scaffoldKey.currentState?.openEndDrawer();
-
   }
 
   // void _applyFilters() {
@@ -170,45 +178,77 @@ class _OverAllReportState extends State<OverAllReport> {
 
   Widget _buildDrawer() {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.all(16),
-        children: [
-          Text("Filter by Category"),
-          ...["Gold", "Silver", "Diamond", "Platinum"].map((cat) => CheckboxListTile(
-            title: Text(cat),
-            value: _selectedCategories.contains(cat),
-            onChanged: (val) {
-              setState(() {
-                if (val!) {
-                  _selectedCategories.add(cat);
-                } else {
-                  _selectedCategories.remove(cat);
-                }
-              });
-            },
-          )),
-          SizedBox(height: 20),
-          Text("Sort by"),
-          DropdownButton<String>(
-            value: _sortBy,
-            items: ["timestamp", "totalAmount"].map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
-            onChanged: (val) => setState(() => _sortBy = val!),
-          ),
-          SwitchListTile(
-            title: Text("Ascending"),
-            value: _ascending,
-            onChanged: (val) => setState(() => _ascending = val),
-          ),
-          SizedBox(height: 10),
-          Text("Amount Range: ${_amountRange.start.round()} - ${_amountRange.end.round()}"),
-          RangeSlider(
-            values: _amountRange,
-            min: 0,
-            max: 100000,
-            onChanged: (range) => setState(() => _amountRange = range),
-          ),
-          ElevatedButton(onPressed: _applyFilters, child: Text("Apply Filters")),
-        ],
+      backgroundColor: appFirstColor,
+      child: SafeArea(
+        child: ListView(
+          padding: EdgeInsets.all(16),
+          children: [
+            Text(
+              "Filter by Category",
+              style: MyTextStyle.f16(appBottomColor),
+            ),
+            ...["Gold", "Silver", "Diamond", "Platinum"]
+                .map((cat) => CheckboxListTile(
+                      title: Text(cat),
+                      value: _selectedCategories.contains(cat),
+                      onChanged: (val) {
+                        setState(() {
+                          if (val!) {
+                            _selectedCategories.add(cat);
+                          } else {
+                            _selectedCategories.remove(cat);
+                          }
+                        });
+                      },
+                    )),
+            SizedBox(height: 20),
+            Text("Sort by", style: MyTextStyle.f16(appBottomColor)),
+            SizedBox(height: 10,),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                border: Border.all(
+                    color: appBottomColor, width: 1), // border color and width
+                borderRadius: BorderRadius.circular(10), // border radius
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: _sortBy,
+                  items: ["timestamp", "totalAmount"]
+                      .map((s) => DropdownMenuItem(value: s, child: Text(s)))
+                      .toList(),
+                  onChanged: (val) => setState(() => _sortBy = val!),
+                ),
+              ),
+            ),
+            SizedBox(height: 10,),
+            SwitchListTile(
+              title: Text("Ascending"),
+              value: _ascending,
+              onChanged: (val) => setState(() => _ascending = val),
+            ),
+            SizedBox(height: 10),
+            Text(
+                "Amount Range: ${_amountRange.start.round()} - ${_amountRange.end.round()}"),
+            RangeSlider(
+              values: _amountRange,
+              min: 0,
+              activeColor: appBottomColor,
+              inactiveColor: appButton2Color,
+              max: 100000,
+              onChanged: (range) => setState(() => _amountRange = range),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            appButton(
+                onTap: _applyFilters,
+                height: 50,
+                width: double.infinity,
+                color: whiteColor,
+                buttonText: "Apply Filter"),
+          ],
+        ),
       ),
     );
   }
@@ -220,55 +260,153 @@ class _OverAllReportState extends State<OverAllReport> {
       itemCount: _billingData.length,
       itemBuilder: (ctx, i) {
         final data = _billingData[i].data() as Map<String, dynamic>;
-        return ListTile(
-          title: Text(data['productName'] ?? ''),
-          subtitle: Text("Amount: ${data['totalAmount']}, Category: ${data['category']}"),
+        return Container(
+          margin: EdgeInsets.symmetric(vertical: 5),
+          padding: const EdgeInsets.all(15),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 2,
+                blurRadius: 6,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                data['productName'] ?? '',
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 6),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("${data['username'] ?? 'N/A'}"),
+                  Text("Quantity: ${data['quantity'] ?? '0'}"),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("${data['phone'] ?? 'N/A'}"),
+                  Text("Discount: ${data['discount'] ?? '0'}%"),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("${data['category'] ?? 'N/A'}"),
+                  Text(
+                      "Rs. ${(double.tryParse(data['totalAmount']?.toString() ?? '0') ?? 0).toStringAsFixed(2)}"),
+                ],
+              ),
+            ],
+          ),
         );
+        // return ListTile(
+        //   title: Text(data['productName'] ?? ''),
+        //   subtitle: Text(
+        //       "Amount: ${data['totalAmount']}, Category: ${data['category']}"),
+        // );
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
+      backgroundColor: appFirstColor,
       appBar: AppBar(
-        title: TextField(
-          controller: _searchController,
-          decoration: InputDecoration(hintText: 'Search Product Name'),
-          onSubmitted: (_) => _fetchData(),
+        backgroundColor: appFirstColor,
+        title: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Image.asset(
+                    alignment: Alignment.topCenter,
+                    "assets/arrow.png",
+                    width: size.width * 0.1,
+                    height: size.height * 0.05,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              'Billing Report',
+              style: MyTextStyle.f24(appBottomColor, weight: FontWeight.bold),
+            )
+          ],
         ),
+        automaticallyImplyLeading: false,
         actions: [
           Builder(
             builder: (context) => IconButton(
-              icon: Icon(Icons.filter_list),
+              icon: Icon(
+                Icons.filter_list,
+                color: appBottomColor,
+                size: 35,
+              ),
               onPressed: () {
                 Scaffold.of(context).openEndDrawer();
               },
             ),
           )
         ],
-
       ),
       endDrawer: _buildDrawer(),
-      body: Column(
-        children: [
-          Expanded(child: _buildBillingList()),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(
-                onPressed: _currentPage > 1 ? () => _fetchData(isPrevious: true) : null,
-                child: Text("Previous"),
-              ),
-              Text("Page $_currentPage"),
-              ElevatedButton(
-                onPressed: _billingData.length == 10 ? () => _fetchData(isNext: true) : null,
-                child: Text("Next"),
-              ),
-            ],
-          )
-        ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        child: Column(
+          children: [
+            TextField(
+              controller: _searchController,
+              decoration: customInputDecoration("Search Product Name"),
+              onSubmitted: (_) => _fetchData(),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Expanded(child: _buildBillingList()),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: _currentPage > 1
+                      ? () => _fetchData(isPrevious: true)
+                      : null,
+                  child: Text("Previous"),
+                ),
+                Text("Page $_currentPage"),
+                ElevatedButton(
+                  onPressed: _billingData.length == 10
+                      ? () => _fetchData(isNext: true)
+                      : null,
+                  child: Text("Next"),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

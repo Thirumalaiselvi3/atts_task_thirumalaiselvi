@@ -234,16 +234,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       loginLoad
                           ? const SpinKitCircle(
                           color: appPrimaryColor, size: 30)
-                          : InkWell(
-                        onTap: () {
-                          authController.signIn(email.text, password.text);
-                        },
-                        child: appButton(
-                            height: 50,
-                            width: size.width * 0.90,
-                            color: whiteColor,
-                            buttonText: "Login"),
-                      ),
+                          : appButton(
+                            onTap: (){
+                              authController.signIn(email.text, password.text);
+                            },
+                              height: 50,
+                              width: size.width * 0.90,
+                              color: whiteColor,
+                              buttonText: "Login"),
                       SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.all(10.0),

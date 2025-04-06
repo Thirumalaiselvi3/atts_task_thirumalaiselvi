@@ -1,3 +1,4 @@
+import 'package:atts/Reusable/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:atts/Reusable/carousel_slider.dart';
 import 'package:atts/Reusable/color.dart';
@@ -37,23 +38,25 @@ class _HomeState extends State<Home> {
             // Drawer Icon
             Padding(
               padding: const EdgeInsets.only(left: 10, top: 10),
-              child: IconButton(
-                icon: const Icon(Icons.sort, size: 28),
-                onPressed: () {
-                  _scaffoldKey.currentState?.openDrawer();
-                },
-              ),
-            ),
-
-            // App Title
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                "ATTS Jewellery",
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                ),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.sort, size: 28),
+                    onPressed: () {
+                      _scaffoldKey.currentState?.openDrawer();
+                    },
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "ATTS Jewellery",
+                    style: MyTextStyle.f22(
+                      appBottomColor,
+                      weight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -69,20 +72,6 @@ class _HomeState extends State<Home> {
             ),
 
             const SizedBox(height: 15),
-
-            // Category Header
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                "Categories",
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 10),
 
             // Category cards as horizontal list
             SizedBox(
@@ -101,10 +90,9 @@ class _HomeState extends State<Home> {
                     },
                     child: Container(
                       width: 77,
-
                       margin: const EdgeInsets.only(right: 10),
                       decoration: BoxDecoration(
-                        color: isSelected ? appBottomColor:appFirstColor,
+                        color: isSelected ? appBottomColor : appFirstColor,
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
@@ -122,7 +110,6 @@ class _HomeState extends State<Home> {
                             height: 40,
                             width: 40,
                           ),
-
                           Text(
                             categories[index]['title'],
                             style: TextStyle(

@@ -171,3 +171,20 @@ class CustomInputField extends StatelessWidget {
     );
   }
 }
+
+
+InputDecoration customInputDecoration(String label) {
+  return InputDecoration(
+    labelText: label,
+    labelStyle: MyTextStyle.f16(appBottomColor),
+    border: OutlineInputBorder(),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: BorderSide(color: appButton2Color, width: 1),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: BorderSide(color: appBottomColor, width: 1),
+    ),
+  );
+}

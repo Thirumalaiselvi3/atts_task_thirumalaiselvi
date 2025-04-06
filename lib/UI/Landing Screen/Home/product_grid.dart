@@ -17,7 +17,8 @@ class ProductGrid extends StatelessWidget {
           .where("category", isEqualTo: category)
           .snapshots(),
       builder: (context, snapshot) {
-        if (snapshot.hasError) return const Center(child: Text("Something went wrong!"));
+        if (snapshot.hasError)
+          return const Center(child: Text("Something went wrong!"));
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty)
           return const Center(child: Text("No Products Found"));
 
@@ -49,7 +50,7 @@ class ProductGrid extends StatelessWidget {
                 duration: const Duration(milliseconds: 200),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color:appFirstColor,
+                  color: appFirstColor,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black12,
@@ -66,24 +67,27 @@ class ProductGrid extends StatelessWidget {
                         Stack(
                           children: [
                             ClipRRect(
-                              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                              borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(20)),
                               child: SizedBox(
-                                height: 150, // 🔽 Decrease this value to reduce image height
+                                height:
+                                    150, // 🔽 Decrease this value to reduce image height
                                 width: double.infinity,
                                 child: Image.network(
                                   product.imageUrl,
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                                      const Icon(Icons.broken_image,
+                                          size: 40, color: Colors.grey),
                                 ),
                               ),
                             ),
-
                             Positioned(
                               top: 8,
                               right: 8,
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
                                 decoration: BoxDecoration(
                                   color: Colors.redAccent,
                                   borderRadius: BorderRadius.circular(12),
@@ -106,9 +110,12 @@ class ProductGrid extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(9),
                             child: Row(
-
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       product.name,
@@ -130,13 +137,10 @@ class ProductGrid extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-
-
                               ],
                             ),
                           ),
                         ),
-
                       ],
                     ),
 
@@ -146,7 +150,7 @@ class ProductGrid extends StatelessWidget {
                       right: 12,
                       child: Container(
                         decoration: BoxDecoration(
-                          color:appBottomColor,
+                          color: appBottomColor,
                           borderRadius: BorderRadius.circular(30),
                           boxShadow: [
                             BoxShadow(
@@ -157,11 +161,15 @@ class ProductGrid extends StatelessWidget {
                           ],
                         ),
                         child: IconButton(
-                          icon: const Icon(Icons.add_shopping_cart, color: Colors.white),
+                          icon: const Icon(Icons.double_arrow_outlined,
+                              color: Colors.white),
                           onPressed: () {
-                            // Add to cart functionality
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('${product.name} added to cart')),
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    ProductDetailPage(product: product),
+                              ),
                             );
                           },
                         ),
@@ -169,7 +177,6 @@ class ProductGrid extends StatelessWidget {
                     ),
                   ],
                 ),
-
               ),
             );
           },

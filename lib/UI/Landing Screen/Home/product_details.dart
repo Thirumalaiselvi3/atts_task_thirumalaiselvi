@@ -1,3 +1,5 @@
+import 'package:atts/Reusable/color.dart';
+import 'package:atts/Reusable/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -31,71 +33,150 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(title: Text(widget.product.name)),
-      floatingActionButton: isBilled
-          ? FloatingActionButton.extended(
-        onPressed: _generateAndViewPdf,
-        icon: Icon(Icons.picture_as_pdf),
-        label: Text("Invoice"),
-      )
-          : null,
+      backgroundColor: appFirstColor, 
+      // floatingActionButton: isBilled
+      //     ? FloatingActionButton.extended(
+      //   onPressed: _generateAndViewPdf,
+      //   backgroundColor: appButton2Color,
+      //   icon: Icon(Icons.picture_as_pdf,color: appBottomColor,),
+      //   label: Text("Invoice",style: MyTextStyle.f16(whiteColor),),
+      // )
+      //     : null,
       bottomNavigationBar: Container(
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(color: Colors.white, boxShadow: [
+        decoration: BoxDecoration(color: appBottomColor, boxShadow: [
           BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, -1))
         ]),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Total: ₹${totalAmount.toStringAsFixed(2)}",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                style: MyTextStyle.f20(whiteColor,weight: FontWeight.bold)),
+            isBilled? ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: appButton2Color, // Disabled vs active color
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 4,
+              ),
+              onPressed:   _generateAndViewPdf,
+              child: Text(  "View Invoice",style: MyTextStyle.f16(   whiteColor),),
+            ):
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isBilled ? Colors.grey :appButton2Color, // Disabled vs active color
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 4,
+              ),
               onPressed: isBilled ? null : _storeBillingData,
-              child: Text(isBilled ? "Billed" : "Bill Now"),
+              child: Text(isBilled ? "Billed" : "Bill Now",style: MyTextStyle.f16(   whiteColor),),
             )
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(child: Image.network(widget.product.imageUrl, height: 200)),
-            SizedBox(height: 16),
-            Text(widget.product.name,
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
-            Text("Price: ₹${widget.product.amount}"),
-            Text("Discount: ${widget.product.discount}%",
-                textAlign: TextAlign.right),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: quantity > 1 ? () => setState(() => quantity--) : null,
-                  icon: Icon(Icons.remove_circle_outline),
-                ),
-                Text('$quantity', style: TextStyle(fontSize: 18)),
-                IconButton(
-                  onPressed: () => setState(() => quantity++),
-                  icon: Icon(Icons.add_circle_outline),
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  Text("Price After Discount: ₹${discountedPrice.toStringAsFixed(2)}"),
-                  Text("Tax (18%): ₹${taxAmount.toStringAsFixed(2)}"),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10,left: 10),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Image.asset(
+                          alignment: Alignment.topCenter,
+                          "assets/arrow.png",
+                          width: size.width * 0.1,
+                          height: size.height * 0.05,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10,),
+                  Text('Jewellery Detail',style: MyTextStyle.f24(appBottomColor,weight: FontWeight.bold),)
                 ],
               ),
-            ),
-          ],
+              Center(child: Image.network(widget.product.imageUrl, height: 200,width: double.infinity,)),
+              SizedBox(height: 16),
+              Divider(color: appBottomColor,endIndent: 15,indent: 15,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Text('Product Name : ${widget.product.name}',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              ),
+            Divider(color: appBottomColor,endIndent: 15,indent: 15,),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 8),
+                            Text("Price: ₹${widget.product.amount}"),
+                            Text("Discount: ${widget.product.discount}%",
+                                textAlign: TextAlign.right),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              onPressed: quantity > 1 ? () => setState(() => quantity--) : null,
+                              icon: Icon(Icons.remove_circle,color: Colors.red.shade900,),
+                            ),
+                            Text('$quantity', style: TextStyle(fontSize: 18)),
+                            IconButton(
+                              onPressed: () => setState(() => quantity++),
+                              icon: Icon(Icons.add_circle,color: Colors.green.shade900,),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  Divider(color: appBottomColor,),
+                  SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text("Price After Discount: ₹${discountedPrice.toStringAsFixed(2)}"),
+                        Text("Tax (18%): ₹${taxAmount.toStringAsFixed(2)}"),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
+            ],
+          ),
         ),
       ),
     );
