@@ -129,17 +129,7 @@ class _SecondSplashScreenState extends State<SecondSplashScreen>
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   width: double.infinity,
                   child: GestureDetector(
-                    onTap: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      String? uid = prefs.getString("uid");
-                      print("Stored UID: $uid");
-                      if (uid!.isEmpty) {
-                        Navigator.pushNamed(context, AttsRoutes.loginRoute);
-                      } else {
-                        Navigator.pushNamed(context, AttsRoutes.bottomNavBarRoute);
-                      }
-                    },
+                    onTap: () async {},
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
                       padding: EdgeInsets.all(isPressed ? 4 : 0),
@@ -159,8 +149,18 @@ class _SecondSplashScreenState extends State<SecondSplashScreen>
                         painter: GradientBorderPainter(_animation),
                         child: ElevatedButton(
                             onPressed: () async {
-                              Navigator.pushReplacementNamed(
-                                  context, AttsRoutes.loginRoute);
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              String? uid = prefs.getString("uid");
+                              print("Stored UID: $uid");
+
+                              if (uid == null || uid.isEmpty) {
+                                Navigator.pushNamed(
+                                    context, AttsRoutes.loginRoute);
+                              } else {
+                                Navigator.pushNamed(
+                                    context, AttsRoutes.bottomNavBarRoute);
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor:

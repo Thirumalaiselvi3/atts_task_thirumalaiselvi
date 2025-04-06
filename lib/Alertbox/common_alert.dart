@@ -7,7 +7,6 @@ import '../Reusable/text_styles.dart';
 void CommonAlert({
   required BuildContext context,
   required String title,
-  required bool load,
   required String description,
   required VoidCallback onOkPressed,
 }) {
@@ -29,8 +28,7 @@ void CommonAlert({
             ),
             child: Text("Cancel", style:MyTextStyle.f14(appBottomColor)),
           ),
-          // OK Button (Elevated)
-         load ?  const SpinKitCircle(color: appPrimaryColor, size: 30) : ElevatedButton(
+          ElevatedButton(
             onPressed: onOkPressed,
             style: ElevatedButton.styleFrom(
               backgroundColor: appBottomColor,

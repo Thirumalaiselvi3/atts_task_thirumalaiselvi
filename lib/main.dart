@@ -1,3 +1,4 @@
+import 'package:atts/Controller/Landing%20Page/profile_controller.dart';
 import 'package:atts/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';

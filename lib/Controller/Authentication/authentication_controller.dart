@@ -43,8 +43,7 @@ class AuthController extends GetxController {
         "phone": '$code $phone',
         "createdAt": DateTime.now(),
       });
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString("uid", cred.user!.uid);
+
 
       Get.snackbar("Success", "Account created!");
 
@@ -65,7 +64,9 @@ class AuthController extends GetxController {
       await firestore.collection("users").doc(cred.user!.uid).update({
         "lastLogin": DateTime.now(),
       });
-
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString("uid", cred.user!.uid);
+      print('user id ${cred.user!.uid}');
       Get.snackbar("Success", "Logged in!");
       Get.offAll(() => BottomNavBar());
     } catch (e) {

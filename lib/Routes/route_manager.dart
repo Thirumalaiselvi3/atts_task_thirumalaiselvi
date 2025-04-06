@@ -1,8 +1,9 @@
 import 'package:atts/Routes/route.dart';
 import 'package:atts/UI/Authentication/signup.dart';
 import 'package:atts/UI/Dashboard/bottomNav.dart';
+import 'package:atts/UI/Drawer/Menu/Product/add_product.dart';
 import 'package:atts/UI/Drawer/Menu/over_all_report.dart';
-import 'package:atts/UI/Drawer/Menu/product_list.dart';
+import 'package:atts/UI/Drawer/Menu/Product/product_list.dart';
 import 'package:atts/UI/SplashScreen/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -40,6 +41,8 @@ class RouteManager {
         return InstantPageRoute(page: const ProductList());
         case AttsRoutes.overAllReportRoute:
         return InstantPageRoute(page: const OverAllReport());
+        case AttsRoutes.addProductRoute:
+        return InstantPageRoute(page:  AddProduct());
 
 
       default:
