@@ -49,7 +49,7 @@ class ProductGrid extends StatelessWidget {
                 duration: const Duration(milliseconds: 200),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Colors.white,
+                  color:appFirstColor,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black12,
