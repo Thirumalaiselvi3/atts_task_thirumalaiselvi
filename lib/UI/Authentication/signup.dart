@@ -202,7 +202,6 @@ class _SignUpState extends State<SignUp> {
                               return null;
                             }),
                         SizedBox(height: 10),
-                        SizedBox(height: 10),
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Text("Phone Number",
@@ -212,10 +211,12 @@ class _SignUpState extends State<SignUp> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(width: 10,),
                             Container(
                               height: 50,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
+
                                 border: Border.all(
                                   color: appButton1Color,
                                   width: 1,
@@ -224,12 +225,13 @@ class _SignUpState extends State<SignUp> {
                               child: CountryCodePicker(
                                 onChanged: (countryCode) {
                                   setState(() {
-                                    _selectedCountryCode = countryCode.dialCode ?? "+60";
+                                    _selectedCountryCode = countryCode.dialCode ?? "+91";
                                   });
                                 },
                                 initialSelection: _selectedCountryCode,
-                                favorite: const ['+60', '+91', '+44'],
+                                favorite: const ['+91', '+60', '+44'],
                                 showCountryOnly: false,
+                                backgroundColor: appFirstColor,
                                 textStyle: const TextStyle(color: appButton1Color),
                                 showOnlyCountryWhenClosed: false,
                                 alignLeft: false,

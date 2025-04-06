@@ -1,6 +1,8 @@
 import 'package:atts/Reusable/color.dart';
 import 'package:atts/Reusable/text_styles.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -57,7 +59,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 style: MyTextStyle.f20(whiteColor,weight: FontWeight.bold)),
             isBilled? ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: appButton2Color, // Disabled vs active color
+                backgroundColor: appButton1Color, // Disabled vs active color
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -65,7 +67,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 elevation: 4,
               ),
               onPressed:   _generateAndViewPdf,
-              child: Text(  "View Invoice",style: MyTextStyle.f16(   whiteColor),),
+              child: Text(  "View Invoice",style: MyTextStyle.f16(blackColor),),
             ):
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -110,8 +112,41 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   Text('Jewellery Detail',style: MyTextStyle.f24(appBottomColor,weight: FontWeight.bold),)
                 ],
               ),
-              Center(child: Image.network(widget.product.imageUrl, height: 200,width: double.infinity,)),
-              SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 10),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(
+                      color:  appBottomColor,
+                      width: 2, // Border width
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: CachedNetworkImage(
+                      alignment: Alignment.center,
+                      height: 300,
+                      width:double.infinity,
+                      fit: BoxFit.fill,
+                      errorWidget: (context, url, error) {
+                        return const Icon(
+                          Icons.error,
+                          size: 30,
+                          color: appButton2Color,
+                        );
+                      },
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) =>
+                      const SpinKitCircle(
+                          color: appPrimaryColor, size: 50),
+                      imageUrl: widget.product.imageUrl
+                    ),
+                  ),
+                ),
+              ),
+              // Center(child: Image.network(widget.product.imageUrl, height: 200,width: double.infinity,)),
+              SizedBox(height: 5),
               Divider(color: appBottomColor,endIndent: 15,indent: 15,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),

@@ -5,6 +5,7 @@ import 'package:atts/Reusable/customTextfield.dart';
 import 'package:atts/Reusable/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class OverAllReport extends StatefulWidget {
   @override
@@ -254,7 +255,7 @@ class _OverAllReportState extends State<OverAllReport> {
   }
 
   Widget _buildBillingList() {
-    if (_isLoading) return Center(child: CircularProgressIndicator());
+    if (_isLoading) return Center(child: SpinKitCircle(size: 50,color: appBottomColor,));
     if (_billingData.isEmpty) return Center(child: Text("No records found"));
     return ListView.builder(
       itemCount: _billingData.length,
@@ -264,7 +265,7 @@ class _OverAllReportState extends State<OverAllReport> {
           margin: EdgeInsets.symmetric(vertical: 5),
           padding: const EdgeInsets.all(15),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: appBottomColor,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
@@ -280,30 +281,30 @@ class _OverAllReportState extends State<OverAllReport> {
             children: [
               Text(
                 data['productName'] ?? '',
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: MyTextStyle.f18(appButton1Color, weight: FontWeight.bold),
               ),
+              Divider(color: appButton1Color,),
               const SizedBox(height: 6),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("${data['username'] ?? 'N/A'}"),
-                  Text("Quantity: ${data['quantity'] ?? '0'}"),
+                  Text("${data['username'] ?? 'N/A'}",style: MyTextStyle.f16(appButton1Color),),
+                  Text("Quantity: ${data['quantity'] ?? '0'}",style: MyTextStyle.f16(appButton1Color),),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("${data['phone'] ?? 'N/A'}"),
-                  Text("Discount: ${data['discount'] ?? '0'}%"),
+                  Text("${data['phone'] ?? 'N/A'}",style: MyTextStyle.f16(appButton1Color),),
+                  Text("Discount: ${data['discount'] ?? '0'}%",style: MyTextStyle.f16(appButton1Color),),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("${data['category'] ?? 'N/A'}"),
+                  Text("${data['category'] ?? 'N/A'}",style: MyTextStyle.f16(appButton1Color),),
                   Text(
-                      "Rs. ${(double.tryParse(data['totalAmount']?.toString() ?? '0') ?? 0).toStringAsFixed(2)}"),
+                      "Rs. ${(double.tryParse(data['totalAmount']?.toString() ?? '0') ?? 0).toStringAsFixed(2)}",style: MyTextStyle.f16(appButton1Color),),
                 ],
               ),
             ],
@@ -391,17 +392,37 @@ class _OverAllReportState extends State<OverAllReport> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return Colors.grey; // Disabled color
+                        }
+                        return appButton2Color; // Enabled color
+                      },
+                    ),
+                  ),
                   onPressed: _currentPage > 1
                       ? () => _fetchData(isPrevious: true)
                       : null,
-                  child: Text("Previous"),
+                  child: Text("Previous",style: MyTextStyle.f16(whiteColor),),
                 ),
                 Text("Page $_currentPage"),
                 ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                          (Set<MaterialState> states) {
+                        if (states.contains(MaterialState.disabled)) {
+                          return Colors.grey; // Disabled color
+                        }
+                        return appButton2Color; // Enabled color
+                      },
+                    ),
+                  ),
                   onPressed: _billingData.length == 10
                       ? () => _fetchData(isNext: true)
                       : null,
-                  child: Text("Next"),
+                  child: Text("Next",style: MyTextStyle.f16(whiteColor),),
                 ),
               ],
             )

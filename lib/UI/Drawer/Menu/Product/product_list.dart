@@ -77,7 +77,7 @@ class _ProductListState extends State<ProductList> {
                 }
 
                 if (controller.productList.isEmpty) {
-                  return Center(child: Text('No Products Found'));
+                  return Center(child: Text('No Jewellery Found'));
                 }
 
                 return ListView.builder(
