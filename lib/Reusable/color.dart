@@ -11,14 +11,12 @@ const appTitleColor = Color(0xFFFFD700);
 
 const appButton1Color = Color(0xFFFFB300);
 const appButton2Color =  Color(0xFFAB6819);
-const appbgColor = Color(0xFF4E342E); // Deep dark brown
+const appbgColor = Color(0xFF4E342E);
 
 const amberColor =  Colors.amber;
 const orangeColor = Colors.orange;
 
 const blackColor = Colors.black;
-const blueColor = Colors.blue;
-const purpleColor = Colors.purple;
 const whiteColor = Colors.white;
 const redColor = Colors.red;
 const greyColor = Colors.grey;

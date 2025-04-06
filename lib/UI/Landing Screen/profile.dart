@@ -1,4 +1,3 @@
-import 'package:atts/Alertbox/AlertDialogBox.dart';
 import 'package:atts/Alertbox/common_alert.dart';
 import 'package:atts/Controller/Landing%20Page/profile_controller.dart';
 import 'package:atts/Reusable/color.dart';
@@ -16,7 +15,8 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  late ProfileController controller;
+  ProfileController? controller;
+
 
   @override
   void initState() {
@@ -34,10 +34,16 @@ class _ProfileState extends State<Profile> {
   }
 
   Widget build(BuildContext context) {
+    if (controller == null) {
+      // Still loading the controller
+      return const Scaffold(
+        body: Center(child: SpinKitCircle(color: appBottomColor,size: 50,)),
+      );
+    }
     return Scaffold(
       backgroundColor: appFirstColor,
       body: Obx(() {
-        if (controller.isLoading.value) {
+        if (controller!.isLoading.value) {
           return const Center(
             child: SpinKitCircle(
               color: appBottomColor,
@@ -46,7 +52,7 @@ class _ProfileState extends State<Profile> {
           );
         }
 
-        final user = controller.user.value;
+        final user = controller!.user.value;
 
         if (user == null) {
           return const Center(
@@ -128,7 +134,7 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
             ),
-            InkWell(
+            GestureDetector(
               onTap: (){
                 CommonAlert(
                   context: context,
