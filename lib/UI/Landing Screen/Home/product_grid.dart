@@ -2,8 +2,10 @@ import 'package:atts/Model/product_model.dart';
 import 'package:atts/Reusable/color.dart';
 import 'package:atts/Reusable/color.dart';
 import 'package:atts/UI/Landing%20Screen/Home/product_details.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class ProductGrid extends StatelessWidget {
   final String category;
@@ -67,21 +69,41 @@ class ProductGrid extends StatelessWidget {
                         Stack(
                           children: [
                             ClipRRect(
-                              borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(20)),
-                              child: SizedBox(
-                                height:
-                                    150, // 🔽 Decrease this value to reduce image height
+                              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                              child: CachedNetworkImage(
+                                alignment: Alignment.center,
+                                height: 150,
                                 width: double.infinity,
-                                child: Image.network(
-                                  product.imageUrl,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      const Icon(Icons.broken_image,
-                                          size: 40, color: Colors.grey),
-                                ),
+                                fit: BoxFit.fill,
+                                errorWidget: (context, url, error) {
+                                  return const Icon(
+                                    Icons.error,
+                                    size: 30,
+                                    color: appButton2Color,
+                                  );
+                                },
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) =>
+                                const SpinKitCircle(
+                                    color: appPrimaryColor,
+                                    size: 30),
+                                imageUrl: product.imageUrl,
                               ),
                             ),
+                            // ClipRRect(
+                            //   borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                            //   child: SizedBox(
+                            //     height: 150,
+                            //     width: double.infinity,
+                            //     child: Image.network(
+                            //       product.imageUrl,
+                            //       fit: BoxFit.cover,
+                            //       errorBuilder: (context, error, stackTrace) =>
+                            //           const Icon(Icons.broken_image,
+                            //               size: 40, color: Colors.grey),
+                            //     ),
+                            //   ),
+                            // ),
                             Positioned(
                               top: 8,
                               right: 8,
@@ -89,7 +111,7 @@ class ProductGrid extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 4),
                                 decoration: BoxDecoration(
-                                  color: Colors.redAccent,
+                                  color: appButton2Color,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Text(

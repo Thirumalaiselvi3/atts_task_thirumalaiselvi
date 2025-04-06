@@ -65,9 +65,9 @@ class _HomeState extends State<Home> {
             // Carousel Slider
             CarouselSliderWidget(
               imageUrls: [
-                'assets/slider1.png',
-                'assets/slider2.png',
-                'assets/slider3.png',
+                'assets/one.jpg',
+                'assets/two.png',
+                'assets/three.jpg',
               ],
             ),
 

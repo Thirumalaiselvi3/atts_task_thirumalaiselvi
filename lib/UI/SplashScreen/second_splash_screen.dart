@@ -155,11 +155,9 @@ class _SecondSplashScreenState extends State<SecondSplashScreen>
                               print("Stored UID: $uid");
 
                               if (uid == null || uid.isEmpty) {
-                                Navigator.pushNamed(
-                                    context, AttsRoutes.loginRoute);
+                                Navigator.pushReplacementNamed(context, AttsRoutes.loginRoute);
                               } else {
-                                Navigator.pushNamed(
-                                    context, AttsRoutes.bottomNavBarRoute);
+                                Navigator.pushReplacementNamed(context, AttsRoutes.bottomNavBarRoute);
                               }
                             },
                             style: ElevatedButton.styleFrom(

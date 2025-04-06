@@ -120,11 +120,11 @@ class ProductController extends GetxController {
     try {
       if (editingProductId != null) {
         await _db.collection('products').doc(editingProductId).update(data);
-        Get.off(ProductList());
+        Get.back();
         Get.snackbar("Updated", "Product updated successfully");
       } else {
         await _db.collection('products').add(data);
-        Get.off(ProductList());
+        Get.back();
         Get.snackbar("Added", "Product added successfully");
       }
 
@@ -146,7 +146,7 @@ class ProductController extends GetxController {
       await ref.delete();
 
       fetchProducts();
-      Get.snackbar("Deleted", "Product deleted");
+      Get.snackbar("Deleted", "Jewellery deleted Successfully..");
     } catch (e) {
       Get.snackbar("Error", "Failed to delete product");
     }

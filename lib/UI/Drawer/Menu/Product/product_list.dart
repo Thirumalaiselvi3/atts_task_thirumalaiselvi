@@ -4,11 +4,13 @@ import 'package:atts/Reusable/color.dart';
 import 'package:atts/Reusable/text_styles.dart';
 import 'package:atts/Routes/route.dart';
 import 'package:atts/UI/Drawer/Menu/Product/add_product.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
 import '../../../../Reusable/fab.dart';
+
 class ProductList extends StatefulWidget {
   const ProductList({super.key});
 
@@ -22,13 +24,13 @@ class _ProductListState extends State<ProductList> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     controller.fetchProducts();
-    return   SafeArea(
+    return SafeArea(
       child: Scaffold(
         backgroundColor: appFirstColor,
-       floatingActionButton:  CustomFAB(
+        floatingActionButton: CustomFAB(
           onPressed: () {
             controller.clearForm();
-          Navigator.pushNamed(context, AttsRoutes.addProductRoute);
+            Navigator.pushNamed(context, AttsRoutes.addProductRoute);
           },
           icon: Icons.add,
           backgroundColor: appButton2Color,
@@ -38,7 +40,7 @@ class _ProductListState extends State<ProductList> {
             Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 10,left: 10),
+                  padding: const EdgeInsets.only(top: 10, left: 10),
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: InkWell(
@@ -54,20 +56,30 @@ class _ProductListState extends State<ProductList> {
                     ),
                   ),
                 ),
-                SizedBox(width: 10,),
-                Text('Jewellery List',style: MyTextStyle.f24(appBottomColor,weight: FontWeight.bold),)
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'Jewellery List',
+                  style:
+                      MyTextStyle.f24(appBottomColor, weight: FontWeight.bold),
+                )
               ],
             ),
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return Center(child: SpinKitCircle(size: 50,color: appBottomColor,));
+                  return Center(
+                      child: SpinKitCircle(
+                    size: 50,
+                    color: appBottomColor,
+                  ));
                 }
-              
+
                 if (controller.productList.isEmpty) {
                   return Center(child: Text('No Products Found'));
                 }
-              
+
                 return ListView.builder(
                   itemCount: controller.productList.length,
                   itemBuilder: (context, index) {
@@ -92,28 +104,51 @@ class _ProductListState extends State<ProductList> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.network(
-                                  product['imageUrl'],
-                                  width: 60,
-                                  height: 60,
-                                  fit: BoxFit.cover,
+                                borderRadius: BorderRadius.circular(15),
+                                child: CachedNetworkImage(
+                                  alignment: Alignment.center,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.1,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.19,
+                                  fit: BoxFit.fill,
+                                  errorWidget: (context, url, error) {
+                                    return const Icon(
+                                      Icons.error,
+                                      size: 30,
+                                      color: appButton2Color,
+                                    );
+                                  },
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          const SpinKitCircle(
+                                              color: appPrimaryColor, size: 30),
+                                  imageUrl: product['imageUrl'],
                                 ),
                               ),
+                              // ClipRRect(
+                              //   borderRadius: BorderRadius.circular(12),
+                              //   child: Image.network(
+                              //     product['imageUrl'],
+                              //     width: 60,
+                              //     height: 60,
+                              //     fit: BoxFit.cover,
+                              //   ),
+                              // ),
                               SizedBox(width: 12),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      product['name'],
-                                      style: MyTextStyle.f20(appButton1Color,weight: FontWeight.bold)
-                                    ),
+                                    Text(product['name'],
+                                        style: MyTextStyle.f20(appButton1Color,
+                                            weight: FontWeight.bold)),
                                     SizedBox(height: 4),
                                     Text(
-                                      "₹${product['amount']} - ${product['category']}",
-                                        style: MyTextStyle.f16(amberColor, )
-                                    ),
+                                        "₹${product['amount']} - ${product['category']}",
+                                        style: MyTextStyle.f16(
+                                          amberColor,
+                                        )),
                                   ],
                                 ),
                               ),
@@ -123,7 +158,10 @@ class _ProductListState extends State<ProductList> {
                             top: 0,
                             right: 0,
                             child: PopupMenuButton<String>(
-                              icon: Icon(Icons.more_vert,color: amberColor,),
+                              icon: Icon(
+                                Icons.more_vert,
+                                color: amberColor,
+                              ),
                               onSelected: (value) {
                                 if (value == 'edit') {
                                   controller.loadProductForEdit(product);
@@ -132,9 +170,12 @@ class _ProductListState extends State<ProductList> {
                                   CommonAlert(
                                     context: context,
                                     title: "Delete",
-                                    description: "Are you sure you want to delete this item?",
+                                    description:
+                                        "Are you sure you want to delete this item?",
                                     onOkPressed: () async {
-                                      controller.deleteProduct(product['id'], product['imageUrl']);
+                                      controller.deleteProduct(
+                                          product['id'], product['imageUrl']);
+                                      Navigator.pop(context);
                                     },
                                   );
                                 }
@@ -146,7 +187,9 @@ class _ProductListState extends State<ProductList> {
                                     children: [
                                       Icon(Icons.edit, color: appBottomColor),
                                       SizedBox(width: 8),
-                                      Text('Edit',style: MyTextStyle.f14(appBottomColor)),
+                                      Text('Edit',
+                                          style:
+                                              MyTextStyle.f14(appBottomColor)),
                                     ],
                                   ),
                                 ),
@@ -156,7 +199,10 @@ class _ProductListState extends State<ProductList> {
                                     children: [
                                       Icon(Icons.delete, color: appBottomColor),
                                       SizedBox(width: 8),
-                                      Text('Delete',style: MyTextStyle.f14(appBottomColor),),
+                                      Text(
+                                        'Delete',
+                                        style: MyTextStyle.f14(appBottomColor),
+                                      ),
                                     ],
                                   ),
                                 ),

@@ -67,7 +67,7 @@ class AuthController extends GetxController {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString("uid", cred.user!.uid);
       print('user id ${cred.user!.uid}');
-      Get.snackbar("Success", "Logged in!");
+      Get.snackbar("Success", "You have been logged in successfully.");
       Get.offAll(() => BottomNavBar());
     } catch (e) {
       Get.snackbar("Error", e.toString());

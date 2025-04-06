@@ -1,6 +1,8 @@
 import 'package:atts/Reusable/color.dart';
 import 'package:atts/Reusable/text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -226,9 +228,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       await FirebaseFirestore.instance.collection('billing').add(billingData);
 
       setState(() => isBilled = true);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Billing saved successfully')),
-      );
+      Get.snackbar("Success", "Billing has been successfully saved. Please download or view your invoice below.");
     } catch (e) {
       print('Error storing billing data: $e');
     }
@@ -244,22 +244,45 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         build: (context) => pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
+            pw.Center(
+              child: pw.Image(logoImage, width: 60),
+            ),
             pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: pw.MainAxisAlignment.center,
               children: [
-                pw.Image(logoImage, width: 60),
+
                 pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.end,
+                  crossAxisAlignment: pw.CrossAxisAlignment.center,
                   children: [
-                    pw.Text("My Shop", style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
-                    pw.Text("123 Street, City, Country"),
-                    pw.Text("Phone: +91 9876543210"),
+                    pw.Text("ATTS JEWELLERY", style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+                    pw.Text("ABC Street, Tenkasi, Tamil Nadu"),
+                    pw.Text("Phone: +91 87547 22940"),
                   ],
                 ),
               ],
             ),
-            pw.SizedBox(height: 20),
-            pw.Text("INVOICE", style: pw.TextStyle(fontSize: 24)),
+            pw.SizedBox(height: 10),
+            pw.Divider(),
+            pw.SizedBox(height: 10),
+            pw.Text("INVOICE", style: pw.TextStyle(fontSize: 20)),
+            pw.Row(
+              children: [
+                pw.Spacer(), // Pushes the text to the right
+                pw.Text(
+                  'Date: ${DateFormat('yyyy-MM-dd').format(DateTime.now())}',
+                  style: pw.TextStyle(fontSize: 12),
+                ),
+              ],
+            ),
+            pw.Row(
+              children: [
+                pw.Spacer(), // Pushes the text to the right
+                pw.Text(
+                 "Time: ${DateFormat('HH:mm').format(DateTime.now())}",
+                  style: pw.TextStyle(fontSize: 12),
+                ),
+              ],
+            ),
             pw.SizedBox(height: 16),
             pw.Table.fromTextArray(
               headers: ['Product', 'Qty', 'Unit Price', 'Discount', 'Price', 'Tax', 'Total'],
