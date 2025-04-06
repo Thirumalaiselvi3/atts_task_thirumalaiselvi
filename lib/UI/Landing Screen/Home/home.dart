@@ -49,7 +49,7 @@ class _HomeState extends State<Home> {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                "CRUD Jewellery",
+                "ATTS Jewellery",
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
