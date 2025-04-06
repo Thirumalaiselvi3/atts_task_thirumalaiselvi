@@ -40,7 +40,7 @@ class RouteManager {
         case AttsRoutes.productListRoute:
         return InstantPageRoute(page: const ProductList());
         case AttsRoutes.overAllReportRoute:
-        return InstantPageRoute(page: const OverAllReport());
+        return InstantPageRoute(page:   OverAllReport());
         case AttsRoutes.addProductRoute:
         return InstantPageRoute(page:  AddProduct());
 
