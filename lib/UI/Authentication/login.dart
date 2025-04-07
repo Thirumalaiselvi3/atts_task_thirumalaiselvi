@@ -90,7 +90,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               animatedTexts: [
                                 TyperAnimatedText(
                                   'Let’s Get You Sparkling Again!',
-                                  // 'WELCOME TO SRI SUNDARARAJA PERUMAL TEMPLE',
                                   textAlign: TextAlign.center,
                                   textStyle: MyTextStyle.splashTitle(),
                                   speed: const Duration(

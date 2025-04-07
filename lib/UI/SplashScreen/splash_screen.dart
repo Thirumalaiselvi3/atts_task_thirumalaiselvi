@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
   dynamic userId;
   dynamic roleId;
-  final String title = "Sri Sundararaja Perumal Temple";
+  final String title = "ATTS Jewellery";
 
   getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
