@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.sort, size: 28),
+                      icon: const Icon(Icons.sort, size: 28,color: appBottomColor,),
                       onPressed: () {
                         _scaffoldKey.currentState?.openDrawer();
                       },

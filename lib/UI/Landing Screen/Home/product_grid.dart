@@ -105,6 +105,7 @@ class ProductGrid extends StatelessWidget {
                             //     ),
                             //   ),
                             // ),
+                            if(product.discount != 0.0)
                             Positioned(
                               top: 8,
                               right: 8,
